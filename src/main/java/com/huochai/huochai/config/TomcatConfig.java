@@ -5,14 +5,13 @@ import org.apache.catalina.valves.RemoteIpValve;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  *
  *@author peilizhi 
  *@date 2026/3/25 20:23
  **/
-@Configuration
+//@Configuration
 public class TomcatConfig {
 
     @Bean
@@ -28,9 +27,9 @@ public class TomcatConfig {
             // 添加阀门实现自动重定向
             RemoteIpValve remoteIpValve = new RemoteIpValve();
             remoteIpValve.setProtocolHeader("X-Forwarded-Proto");
+            factory.addEngineValves(remoteIpValve);
 
             factory.addAdditionalTomcatConnectors(connector);
-            factory.addEngineValves(remoteIpValve);
         };
     }
 }
