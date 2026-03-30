@@ -124,7 +124,6 @@ class RetryTest extends BaseHttpClientTest {
 
         System.out.println("result = " + result);
 
-
         // 验证请求次数：前两次超时失败，第三次成功，总共3次请求
         assertThat(mockWebServer.getRequestCount()).isEqualTo(3);
 
