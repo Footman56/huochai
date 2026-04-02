@@ -1,8 +1,8 @@
 package com.huochai.huochai;
 
-import com.huochai.huochai.demos.web.User;
-import com.huochai.huochai.utils.EnhancedWebClientClient;
-import com.huochai.huochai.utils.JsonUtil;
+import com.huochai.demos.web.User;
+import com.huochai.utils.EnhancedWebClientClient;
+import com.huochai.utils.JsonUtil;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

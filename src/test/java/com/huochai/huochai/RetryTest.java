@@ -6,7 +6,7 @@ package com.huochai.huochai;
  *@date 2026/3/26 23:29
  **/
 
-import com.huochai.huochai.utils.EnhancedRestTemplateClient;
+import com.huochai.utils.EnhancedRestTemplateClient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClientException;

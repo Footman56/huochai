@@ -170,7 +170,7 @@ tomcat.start();
 
 ## 使用示例
 
-运行 `com.huochai.huochai.tomcat.Tomcat` 主类启动服务器：
+运行 `com.huochai.tomcat.Tomcat` 主类启动服务器：
 
 ```bash
 # 访问 http://localhost:8080/hello

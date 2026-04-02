@@ -1,6 +1,6 @@
 package com.huochai.huochai;
 
-import com.huochai.huochai.utils.EnhancedRestTemplateClient;
+import com.huochai.utils.EnhancedRestTemplateClient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClientException;
