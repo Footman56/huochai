@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Success</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #28a745; }
+        .info { background: #f8f9fa; padding: 20px; border-radius: 5px; }
+        .btn { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Login Successful!</h1>
+    <div class="info">
+        <p><strong>Name:</strong> <span th:text="${name}">User</span></p>
+        <p><strong>Email:</strong> <span th:text="${email}">user@example.com</span></p>
+    </div>
+    <a href="/user" class="btn">View Profile</a>
+    <a href="/logout" class="btn" style="background: #dc3545;">Logout</a>
+</body>
+</html>

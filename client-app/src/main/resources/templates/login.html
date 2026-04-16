@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - OAuth2 Client</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Login</h1>
+    <p>Click the button below to login with OAuth2:</p>
+    <form th:action="@{/oauth2/authorization/client-app}" method="get">
+        <button type="submit" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Login with OAuth2
+        </button>
+    </form>
+</body>
+</html>

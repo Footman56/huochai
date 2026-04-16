@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        .info { background: #f8f9fa; padding: 20px; border-radius: 5px; }
+        pre { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .btn { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>User Profile</h1>
+    <div class="info">
+        <p><strong>Name:</strong> <span th:text="${name}">User</span></p>
+        <p><strong>Email:</strong> <span th:text="${email}">user@example.com</span></p>
+    </div>
+    <h3>All Attributes:</h3>
+    <pre th:text="${attributes}">{}</pre>
+    <a href="/oauth2/loginSuccess" class="btn">Back to Home</a>
+    <a href="/logout" class="btn" style="background: #dc3545;">Logout</a>
+</body>
+</html>
