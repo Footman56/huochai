@@ -1,0 +1,117 @@
+{
+  "index_patterns": ["huochai-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "refresh_interval": "5s"
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "timestamp": {
+          "type": "date"
+        },
+        "traceId": {
+          "type": "keyword"
+        },
+        "spanId": {
+          "type": "keyword"
+        },
+        "parentSpanId": {
+          "type": "keyword"
+        },
+        "logType": {
+          "type": "keyword"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "serviceName": {
+          "type": "keyword"
+        },
+        "host": {
+          "type": "keyword"
+        },
+        "className": {
+          "type": "keyword"
+        },
+        "methodName": {
+          "type": "keyword"
+        },
+        "message": {
+          "type": "text",
+          "analyzer": "standard"
+        },
+        "duration": {
+          "type": "long"
+        },
+        "status": {
+          "type": "keyword"
+        },
+        "errorMessage": {
+          "type": "text",
+          "analyzer": "standard"
+        },
+        "stackTrace": {
+          "type": "text",
+          "index": false
+        },
+        "httpMethod": {
+          "type": "keyword"
+        },
+        "path": {
+          "type": "keyword"
+        },
+        "responseStatus": {
+          "type": "integer"
+        },
+        "clientIp": {
+          "type": "ip"
+        },
+        "sql": {
+          "type": "text",
+          "analyzer": "standard"
+        },
+        "sqlType": {
+          "type": "keyword"
+        },
+        "table": {
+          "type": "keyword"
+        },
+        "command": {
+          "type": "keyword"
+        },
+        "key": {
+          "type": "keyword"
+        },
+        "operation": {
+          "type": "keyword"
+        },
+        "index": {
+          "type": "keyword"
+        },
+        "mqType": {
+          "type": "keyword"
+        },
+        "queue": {
+          "type": "keyword"
+        },
+        "exchange": {
+          "type": "keyword"
+        },
+        "routingKey": {
+          "type": "keyword"
+        },
+        "side": {
+          "type": "keyword"
+        },
+        "serviceInterface": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}

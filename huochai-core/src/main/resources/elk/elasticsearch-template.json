@@ -1,0 +1,80 @@
+{
+  "index_patterns": ["huochai-auth-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 3,
+      "number_of_replicas": 1,
+      "refresh_interval": "5s",
+      "index.max_result_window": 10000
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "processed_at": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "trace.id": {
+          "type": "keyword"
+        },
+        "traceId": {
+          "type": "keyword"
+        },
+        "userId": {
+          "type": "keyword"
+        },
+        "username": {
+          "type": "keyword"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "logger": {
+          "type": "keyword"
+        },
+        "log.type": {
+          "type": "keyword"
+        },
+        "service": {
+          "type": "keyword"
+        },
+        "log_message": {
+          "type": "text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_smart"
+        },
+        "message": {
+          "type": "text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_smart"
+        },
+        "tags": {
+          "type": "keyword"
+        },
+        "host.name": {
+          "type": "keyword"
+        },
+        "host.ip": {
+          "type": "ip"
+        },
+        "thread": {
+          "type": "keyword"
+        },
+        "exception": {
+          "type": "text",
+          "index": true
+        },
+        "stack_trace": {
+          "type": "text",
+          "index": true
+        }
+      }
+    },
+    "aliases": {
+      "huochai-auth": {}
+    }
+  }
+}

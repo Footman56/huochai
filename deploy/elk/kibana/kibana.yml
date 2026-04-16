@@ -1,0 +1,25 @@
+# Kibana 配置文件
+
+server.host: "0.0.0.0"
+server.port: 5601
+
+# Elasticsearch 连接
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+
+# 中文界面
+i18n.locale: "zh-CN"
+
+# 安全配置
+xpack.security.enabled: false
+# xpack.security.encryptionKey: "something_at_least_32_characters"
+# xpack.encryptedSavedObjects.encryptionKey: "something_at_least_32_characters"
+# xpack.reporting.encryptionKey: "something_at_least_32_characters"
+
+# 监控配置
+monitoring.ui.container.elasticsearch.enabled: true
+
+# 日志配置
+logging.dest: /var/log/kibana/kibana.log
+
+# 索引模式自动创建
+xpack.ilm.enabled: true

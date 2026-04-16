@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    
+    <!-- 定义变量 -->
+    <property name="APP_NAME" value="huochai-auth"/>
+    <property name="LOG_PATH" value="logs"/>
+    <property name="LOG_PATTERN_CONSOLE" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId}] [%thread] %-5level %logger{36} - %msg%n"/>
+    <property name="LOG_PATTERN_FILE" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId}] [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN_CONSOLE}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 文件输出 - 普通日志 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${APP_NAME}.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- JSON格式日志输出 - 用于ELK -->
+    <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${APP_NAME}-json.log</file>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app_name":"${APP_NAME}","log_type":"application"}</customFields>
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>userId</includeMdcKeyName>
+            <includeMdcKeyName>username</includeMdcKeyName>
+            <includeMdcKeyName>clientType</includeMdcKeyName>
+            <includeMdcKeyName>deviceId</includeMdcKeyName>
+            <fieldNames>
+                <timestamp>@timestamp</timestamp>
+                <level>level</level>
+                <logger>logger</logger>
+                <thread>thread</thread>
+                <message>message</message>
+                <stackTrace>stack_trace</stackTrace>
+            </fieldNames>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}-json.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 错误日志单独输出 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${APP_NAME}-error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}-error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 认证日志单独输出 -->
+    <appender name="AUTH_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${APP_NAME}-auth.log</file>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app_name":"${APP_NAME}","log_type":"auth"}</customFields>
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>userId</includeMdcKeyName>
+            <includeMdcKeyName>username</includeMdcKeyName>
+            <fieldNames>
+                <timestamp>@timestamp</timestamp>
+                <level>level</level>
+                <message>message</message>
+            </fieldNames>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}-auth.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>90</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 认证相关日志配置 -->
+    <logger name="com.huochai.auth" level="DEBUG" additivity="false">
+        <appender-ref ref="AUTH_FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- Token服务日志 -->
+    <logger name="com.huochai.auth.domain.service.impl.TokenDomainServiceImpl" level="DEBUG"/>
+    
+    <!-- 认证服务日志 -->
+    <logger name="com.huochai.auth.domain.service.impl.AuthDomainServiceImpl" level="DEBUG"/>
+    
+    <!-- Redis Token服务日志 -->
+    <logger name="com.huochai.auth.domain.service.impl.RedisTokenServiceImpl" level="DEBUG"/>
+    
+    <!-- JWT过滤器日志 -->
+    <logger name="com.huochai.auth.infrastructure.filter.JwtAuthenticationFilter" level="DEBUG"/>
+
+    <!-- 权限相关日志 -->
+    <logger name="com.huochai.permission" level="DEBUG"/>
+
+    <!-- Spring Security 日志 -->
+    <logger name="org.springframework.security" level="INFO"/>
+
+    <!-- OAuth2 日志 -->
+    <logger name="org.springframework.security.oauth2" level="DEBUG"/>
+
+    <!-- MyBatis-Plus SQL日志 -->
+    <logger name="com.huochai.auth.infrastructure.mapper" level="DEBUG"/>
+    <logger name="com.huochai.permission.infrastructure.mapper" level="DEBUG"/>
+
+    <!-- 根日志配置 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="JSON_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+</configuration>

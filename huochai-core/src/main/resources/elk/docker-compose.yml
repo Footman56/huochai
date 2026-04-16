@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # ==================== Elasticsearch ====================
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: huochai-elasticsearch
+    environment:
+      - node.name=huochai-es-node
+      - cluster.name=huochai-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+      - ./elk/elasticsearch-template.json:/usr/share/elasticsearch/config/templates/huochai-auth.json
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - huochai-logging
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ==================== Logstash ====================
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.11.0
+    container_name: huochai-logstash
+    volumes:
+      - ./elk/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5044:5044"
+      - "8080:8080"
+    networks:
+      - huochai-logging
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      - "LS_JAVA_OPTS=-Xms512m -Xmx512m"
+
+  # ==================== Kibana ====================
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: huochai-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - I18N_LOCALE=zh-CN
+      - SERVER_NAME=huochai-kibana
+    ports:
+      - "5601:5601"
+    networks:
+      - huochai-logging
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  # ==================== Filebeat ====================
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.11.0
+    container_name: huochai-filebeat
+    user: root
+    volumes:
+      - ./elk/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/var/log/huochai:ro
+      - filebeat_data:/usr/share/filebeat/data
+    command: filebeat -e -strict.perms=false
+    networks:
+      - huochai-logging
+    depends_on:
+      - logstash
+
+networks:
+  huochai-logging:
+    driver: bridge
+
+volumes:
+  elasticsearch_data:
+    driver: local
+  filebeat_data:
+    driver: local

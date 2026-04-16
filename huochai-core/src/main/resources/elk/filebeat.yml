@@ -1,0 +1,124 @@
+# Filebeat 配置文件
+# 用于采集应用日志并发送到 Logstash
+
+# ==================== 全局配置 ====================
+name: "huochai-auth-filebeat"
+
+# ==================== 输入配置 ====================
+filebeat.inputs:
+
+  # 主应用日志（JSON格式）
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/huochai/huochai-auth.json
+    json.keys_under_root: true
+    json.add_error_key: true
+    json.message_key: message
+    json.timestamp_key: "@timestamp"
+    fields:
+      log_type: "application"
+      service: "huochai-auth"
+    fields_under_root: true
+
+  # 认证日志
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/huochai/auth.log
+    multiline:
+      pattern: '^\d{4}-\d{2}-\d{2}'
+      negate: true
+      match: after
+    fields:
+      log_type: "auth"
+      service: "huochai-auth"
+    fields_under_root: true
+
+  # 普通应用日志
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/huochai/huochai-auth.log
+    multiline:
+      pattern: '^\d{4}-\d{2}-\d{2}'
+      negate: true
+      match: after
+    fields:
+      log_type: "application"
+      service: "huochai-auth"
+    fields_under_root: true
+
+# ==================== 处理器配置 ====================
+processors:
+  # 添加主机信息
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  
+  # 添加云服务元数据
+  - add_cloud_metadata: ~
+  
+  # 添加 Docker 元数据
+  - add_docker_metadata: ~
+
+  # 解析日志级别
+  - script:
+      lang: javascript
+      id: parse_log_level
+      source: >
+        function process(event) {
+          var message = event.Get("message");
+          if (message) {
+            // 提取日志级别
+            var levelMatch = message.match(/\]\s+(\w+)\s+\[/);
+            if (levelMatch) {
+              event.Put("log.level", levelMatch[1]);
+            }
+            
+            // 提取 TraceId
+            var traceIdMatch = message.match(/\[([a-f0-9-]+)\]/);
+            if (traceIdMatch && traceIdMatch[1].length > 10) {
+              event.Put("trace.id", traceIdMatch[1]);
+            }
+          }
+        }
+
+# ==================== 输出配置 ====================
+
+# 输出到 Logstash
+output.logstash:
+  enabled: true
+  hosts: ["logstash:5044"]
+  loadbalance: true
+  bulk_max_size: 2048
+
+# 输出到 Elasticsearch（备用，直接输出）
+# output.elasticsearch:
+#   hosts: ["http://elasticsearch:9200"]
+#   index: "huochai-auth-%{+yyyy.MM.dd}"
+#   username: "elastic"
+#   password: "changeme"
+
+# ==================== 日志输出 ====================
+logging:
+  level:
+    filebeat: info
+    publisher: warn
+  to_files: true
+  files:
+    path: /var/log/filebeat
+    name: filebeat.log
+    keepfiles: 7
+    permissions: 0644
+
+# ==================== 监控配置 ====================
+monitoring:
+  enabled: true
+  elasticsearch:
+    hosts: ["http://elasticsearch:9200"]
+
+# ==================== 性能配置 ====================
+queue.mem:
+  events: 4096
+  flush.min_events: 512
+  flush.timeout: 1s
