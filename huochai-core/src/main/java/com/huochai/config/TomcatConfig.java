@@ -5,13 +5,14 @@ import org.apache.catalina.valves.RemoteIpValve;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  *
  *@author peilizhi 
  *@date 2026/3/25 20:23
  **/
-//@Configuration
+@Configuration
 public class TomcatConfig {
 
     @Bean

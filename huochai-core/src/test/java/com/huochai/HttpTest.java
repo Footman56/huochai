@@ -1,6 +1,6 @@
 package com.huochai.huochai;
 
-import com.huochai.demos.web.User;
+import com.huochai.domain.demo.User;
 import com.huochai.utils.EnhancedWebClientClient;
 import com.huochai.utils.JsonUtil;
 

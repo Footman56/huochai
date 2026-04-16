@@ -1,4 +1,4 @@
-package com.huochai.demos.domain;
+package com.huochai.domain.demo;
 
 import lombok.Data;
 

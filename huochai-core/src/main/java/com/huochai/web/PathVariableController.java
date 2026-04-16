@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.huochai.demos.web;
+package com.huochai.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

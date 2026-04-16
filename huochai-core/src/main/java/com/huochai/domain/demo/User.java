@@ -14,16 +14,38 @@
  * limitations under the License.
  */
 
-package com.huochai.demos.web;
+package com.huochai.domain.demo;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * @author <a href="mailto:chenxilzx1@gmail.com">theonefx</a>
  */
+@Schema(description = "用户实体")
 public class User {
 
+
+    @Schema(description = "用户ID", example = "1")
+    private Long id;
+
+
+    @Schema(description = "用户名", example = "张三")
     private String name;
 
+
+    @Schema(description = "年龄", example = "12")
     private Integer age;
+
+
+    public User() {
+    }
+
+    public User(Long id, String name, Integer age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
 
     public String getName() {
         return name;
@@ -39,5 +61,14 @@ public class User {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
