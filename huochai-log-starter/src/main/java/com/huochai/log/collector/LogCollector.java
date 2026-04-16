@@ -1,6 +1,7 @@
 package com.huochai.log.collector;
 
-import com.huochai.log.model.LogEntry;
+
+import com.huochai.log.context.LogEntry;
 
 /**
  * 日志收集器接口

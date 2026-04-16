@@ -3,7 +3,6 @@ package com.huochai.log.context;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huochai.log.collector.LogCollector;
 import com.huochai.log.enums.LogType;
-import com.huochai.log.model.LogEntry;
 import com.huochai.log.trace.TraceContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

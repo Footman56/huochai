@@ -1,4 +1,4 @@
-package com.huochai.log.model;
+package com.huochai.log.context;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;

@@ -21,6 +21,11 @@ public class TokenException extends AuthException {
         super(AuthErrorCode.TOKEN_INVALID, message);
     }
 
+
+    public TokenException(AuthErrorCode errorCode, String message) {
+        super(errorCode, message);
+    }
+
     /**
      * Token过期异常
      */

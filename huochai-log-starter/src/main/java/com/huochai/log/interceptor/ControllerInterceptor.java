@@ -31,34 +31,34 @@ import java.util.Map;
  */
 @Aspect
 public class ControllerInterceptor {
-    
+
     private static final Logger log = LoggerFactory.getLogger(ControllerInterceptor.class);
-    
+
     private final LogProperties logProperties;
     private final LogCollector logCollector;
     private final ObjectMapper objectMapper;
-    
+
     public ControllerInterceptor(LogProperties logProperties, LogCollector logCollector) {
         this.logProperties = logProperties;
         this.logCollector = logCollector;
         this.objectMapper = new ObjectMapper();
     }
-    
+
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController) || " +
-              "@within(org.springframework.stereotype.Controller)")
+            "@within(org.springframework.stereotype.Controller)")
     public void controllerPointcut() {
     }
-    
+
     @Around("controllerPointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         LogProperties.ControllerConfig config = logProperties.getController();
-        
+
         // 检查排除路径
         HttpServletRequest request = getRequest();
         if (request != null && isExcludedPath(request.getRequestURI())) {
             return joinPoint.proceed();
         }
-        
+
         long startTime = System.currentTimeMillis();
         ControllerLogEntry logEntry = ControllerLogEntry.builder()
                 .logType(LogType.CONTROLLER.getCode())
@@ -66,7 +66,7 @@ public class ControllerInterceptor {
                 .className(joinPoint.getTarget().getClass().getName())
                 .methodName(joinPoint.getSignature().getName())
                 .build();
-        
+
         // 记录请求信息
         if (request != null) {
             logEntry.setHttpMethod(request.getMethod());
@@ -74,7 +74,7 @@ public class ControllerInterceptor {
             logEntry.setClientIp(getClientIp(request));
             logEntry.setUserAgent(request.getHeader("User-Agent"));
             logEntry.setQueryParams(request.getQueryString());
-            
+
             // 记录请求体
             if (config.isLogRequestBody() && request instanceof ContentCachingRequestWrapper) {
                 ContentCachingRequestWrapper wrapper = (ContentCachingRequestWrapper) request;
@@ -84,25 +84,25 @@ public class ControllerInterceptor {
                     logEntry.setRequestBody(maskSensitiveFields(requestBody));
                 }
             }
-            
+
             // 记录请求头
             if (config.isLogHeaders()) {
                 logEntry.setRequestHeaders(getHeadersAsString(request));
             }
         }
-        
+
         try {
             Object result = joinPoint.proceed();
             long duration = System.currentTimeMillis() - startTime;
-            
+
             logEntry.setDuration(duration);
             logEntry.setStatus("SUCCESS");
-            
+
             // 记录响应信息
             HttpServletResponse response = getResponse();
             if (response != null) {
                 logEntry.setResponseStatus(response.getStatus());
-                
+
                 if (config.isLogResponseBody() && response instanceof ContentCachingResponseWrapper) {
                     ContentCachingResponseWrapper wrapper = (ContentCachingResponseWrapper) response;
                     byte[] buf = wrapper.getContentAsByteArray();
@@ -113,7 +113,7 @@ public class ControllerInterceptor {
                     }
                 }
             }
-            
+
             return result;
         } catch (Throwable e) {
             long duration = System.currentTimeMillis() - startTime;
@@ -127,17 +127,17 @@ public class ControllerInterceptor {
             logCollector.collect(logEntry);
         }
     }
-    
+
     private HttpServletRequest getRequest() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         return attributes != null ? attributes.getRequest() : null;
     }
-    
+
     private HttpServletResponse getResponse() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         return attributes != null ? attributes.getResponse() : null;
     }
-    
+
     private boolean isExcludedPath(String path) {
         String[] excludePaths = logProperties.getController().getExcludePaths();
         if (excludePaths == null || excludePaths.length == 0) {
@@ -145,7 +145,7 @@ public class ControllerInterceptor {
         }
         return Arrays.stream(excludePaths).anyMatch(path::startsWith);
     }
-    
+
     private String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
         if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
@@ -156,7 +156,7 @@ public class ControllerInterceptor {
         }
         return ip;
     }
-    
+
     private String getHeadersAsString(HttpServletRequest request) {
         Map<String, String> headers = new HashMap<>();
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -170,7 +170,7 @@ public class ControllerInterceptor {
             return headers.toString();
         }
     }
-    
+
     private String maskSensitiveFields(String content) {
         String[] sensitiveFields = logProperties.getController().getSensitiveFields();
         if (sensitiveFields == null || sensitiveFields.length == 0) {
@@ -178,12 +178,11 @@ public class ControllerInterceptor {
         }
         String result = content;
         for (String field : sensitiveFields) {
-            result = result.replaceAll("("" + field + ""\s*:\s*")([^"]*)(")", 
-                    "$1******$3");
+            result = result.replaceAll("(" + field + "\":\\s*\")([^\"]*)(\")", "$1******$3");
         }
         return result;
     }
-    
+
     private String getStackTraceAsString(Throwable e) {
         StringBuilder sb = new StringBuilder();
         for (StackTraceElement element : e.getStackTrace()) {

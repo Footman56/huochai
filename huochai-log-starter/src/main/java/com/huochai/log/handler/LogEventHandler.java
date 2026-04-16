@@ -1,6 +1,7 @@
 package com.huochai.log.handler;
 
-import com.huochai.log.model.LogEntry;
+
+import com.huochai.log.context.LogEntry;
 import com.huochai.log.writer.JsonLogWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

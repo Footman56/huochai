@@ -1,5 +1,6 @@
 package com.huochai.log.model;
 
+import com.huochai.log.context.LogEntry;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -11,22 +12,34 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class RedisLogEntry extends LogEntry {
-    
-    /** Redis 命令 */
+
+    /**
+     * Redis 命令
+     */
     private String command;
-    
-    /** Key */
+
+    /**
+     * Key
+     */
     private String key;
-    
-    /** Value */
+
+    /**
+     * Value
+     */
     private String value;
-    
-    /** 过期时间 (秒) */
+
+    /**
+     * 过期时间 (秒)
+     */
     private Long ttl;
-    
-    /** 数据库索引 */
+
+    /**
+     * 数据库索引
+     */
     private Integer database;
-    
-    /** Redis 节点地址 */
+
+    /**
+     * Redis 节点地址
+     */
     private String node;
 }

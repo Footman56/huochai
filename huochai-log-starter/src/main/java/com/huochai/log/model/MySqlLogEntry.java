@@ -1,5 +1,6 @@
 package com.huochai.log.model;
 
+import com.huochai.log.context.LogEntry;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -11,28 +12,44 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class MySqlLogEntry extends LogEntry {
-    
-    /** SQL 语句 */
+
+    /**
+     * SQL 语句
+     */
     private String sql;
-    
-    /** SQL 类型 (SELECT/INSERT/UPDATE/DELETE) */
+
+    /**
+     * SQL 类型 (SELECT/INSERT/UPDATE/DELETE)
+     */
     private String sqlType;
-    
-    /** 数据源名称 */
+
+    /**
+     * 数据源名称
+     */
     private String datasource;
-    
-    /** 目标表 */
+
+    /**
+     * 目标表
+     */
     private String table;
-    
-    /** SQL 参数 */
+
+    /**
+     * SQL 参数
+     */
     private String parameters;
-    
-    /** 影响行数 */
+
+    /**
+     * 影响行数
+     */
     private Integer affectedRows;
-    
-    /** Mapper 类名 */
+
+    /**
+     * Mapper 类名
+     */
     private String mapperClass;
-    
-    /** Mapper 方法 */
+
+    /**
+     * Mapper 方法
+     */
     private String mapperMethod;
 }

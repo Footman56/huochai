@@ -4,9 +4,9 @@
 -- =============================================
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS huochai_auth DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS huochai DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE huochai_auth;
+USE huochai;
 
 -- =============================================
 -- 用户表 (认证上下文)

@@ -5,7 +5,6 @@ import com.huochai.log.autoconfigure.LogProperties;
 import com.huochai.log.collector.LogCollector;
 import com.huochai.log.enums.LogType;
 import com.huochai.log.model.DubboLogEntry;
-import com.huochai.log.trace.TraceContextHolder;
 import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.common.extension.Activate;
 import org.apache.dubbo.rpc.*;
@@ -45,7 +44,7 @@ public class DubboLogInterceptor implements Filter {
                 .side(rpcContext.isProviderSide() ? "provider" : "consumer")
                 .remoteAddress(rpcContext.getRemoteAddressString())
                 .localAddress(rpcContext.getLocalAddressString())
-                .application(rpcContext.getApplication())
+                .application(rpcContext.getRemoteHostName())
                 .group(invoker.getUrl().getParameter(CommonConstants.GROUP_KEY))
                 .version(invoker.getUrl().getParameter(CommonConstants.VERSION_KEY))
                 .build();

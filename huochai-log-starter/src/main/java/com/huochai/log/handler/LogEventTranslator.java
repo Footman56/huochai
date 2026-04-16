@@ -1,8 +1,7 @@
 package com.huochai.log.handler;
 
-import com.huochai.log.model.LogEntry;
+import com.huochai.log.context.LogEntry;
 import com.lmax.disruptor.EventTranslatorOneArg;
-
 /**
  * Disruptor 事件翻译器
  * 将 LogEntry 转换为 LogEvent

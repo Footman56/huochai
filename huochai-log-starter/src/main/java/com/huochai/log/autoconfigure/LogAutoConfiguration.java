@@ -77,7 +77,7 @@ public class LogAutoConfiguration {
     @ConditionalOnWebApplication
     @ConditionalOnProperty(prefix = "huochai.log.controller", name = "enabled", havingValue = "true", matchIfMissing = true)
     public static class ControllerInterceptorConfig {
-        
+
         @Bean
         public ControllerInterceptor controllerInterceptor(LogProperties logProperties, LogCollector logCollector) {
             return new ControllerInterceptor(logProperties, logCollector);
@@ -90,7 +90,7 @@ public class LogAutoConfiguration {
     @Configuration
     @ConditionalOnProperty(prefix = "huochai.log.service", name = "enabled", havingValue = "true", matchIfMissing = true)
     public static class ServiceInterceptorConfig {
-        
+
         @Bean
         public ServiceInterceptor serviceInterceptor(LogProperties logProperties, LogCollector logCollector) {
             return new ServiceInterceptor(logProperties, logCollector);
@@ -104,7 +104,7 @@ public class LogAutoConfiguration {
     @ConditionalOnClass(RedisTemplate.class)
     @ConditionalOnProperty(prefix = "huochai.log.database", name = "redis-enabled", havingValue = "true", matchIfMissing = true)
     public static class RedisInterceptorConfig {
-        
+
         @Bean
         public RedisLogInterceptor redisLogInterceptor(LogProperties logProperties, LogCollector logCollector) {
             return new RedisLogInterceptor(logProperties, logCollector);
@@ -118,12 +118,12 @@ public class LogAutoConfiguration {
     @ConditionalOnClass({ConnectionFactory.class, RabbitTemplate.class})
     @ConditionalOnProperty(prefix = "huochai.log.mq", name = "consumer-enabled", havingValue = "true", matchIfMissing = true)
     public static class MqInterceptorConfig {
-        
+
         @Bean
         public MqConsumerInterceptor mqConsumerInterceptor(LogProperties logProperties, LogCollector logCollector) {
             return new MqConsumerInterceptor(logProperties, logCollector);
         }
-        
+
         @Bean
         public MqProducerInterceptor mqProducerInterceptor(LogProperties logProperties, LogCollector logCollector) {
             return new MqProducerInterceptor(logProperties, logCollector);

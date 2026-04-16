@@ -11,29 +11,29 @@ import com.huochai.log.model.ElasticsearchLogEntry;
  * 通过包装 ES Client 实现日志记录
  */
 public class ElasticsearchLogInterceptor {
-    
+
     private final LogProperties logProperties;
     private final LogCollector logCollector;
     private final ObjectMapper objectMapper;
-    
+
     public ElasticsearchLogInterceptor(LogProperties logProperties, LogCollector logCollector) {
         this.logProperties = logProperties;
         this.logCollector = logCollector;
         this.objectMapper = new ObjectMapper();
     }
-    
+
     /**
      * 记录 ES 操作日志
      */
-    public void logEsOperation(String operation, String index, String docId, 
+    public void logEsOperation(String operation, String index, String docId,
                                String query, Object requestBody, long duration,
-                               Integer responseStatus, Integer hitCount, 
+                               Integer responseStatus, Integer hitCount,
                                boolean success, String error) {
         LogProperties.DatabaseConfig config = logProperties.getDatabase();
         if (!config.isEsEnabled()) {
             return;
         }
-        
+
         ElasticsearchLogEntry logEntry = ElasticsearchLogEntry.builder()
                 .logType(LogType.ES.getCode())
                 .level(success ? "INFO" : "ERROR")
@@ -47,7 +47,7 @@ public class ElasticsearchLogInterceptor {
                 .status(success ? "SUCCESS" : "FAILURE")
                 .errorMessage(error)
                 .build();
-        
+
         if (requestBody != null) {
             try {
                 logEntry.setRequestBody(truncate(objectMapper.writeValueAsString(requestBody), 2000));
@@ -55,10 +55,10 @@ public class ElasticsearchLogInterceptor {
                 logEntry.setRequestBody(truncate(requestBody.toString(), 2000));
             }
         }
-        
+
         logCollector.collect(logEntry);
     }
-    
+
     private String truncate(String str, int maxLength) {
         if (str == null) {
             return null;

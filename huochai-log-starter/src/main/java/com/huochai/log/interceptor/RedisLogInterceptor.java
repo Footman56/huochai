@@ -5,29 +5,25 @@ import com.huochai.log.autoconfigure.LogProperties;
 import com.huochai.log.collector.LogCollector;
 import com.huochai.log.enums.LogType;
 import com.huochai.log.model.RedisLogEntry;
-import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-
-import java.time.Duration;
-import java.util.Collection;
-import java.util.concurrent.TimeUnit;
+import org.springframework.data.redis.core.ValueOperations;
 
 /**
  * Redis 操作日志拦截器
  * 通过包装 RedisTemplate 实现日志记录
  */
 public class RedisLogInterceptor {
-    
+
     private final LogProperties logProperties;
     private final LogCollector logCollector;
     private final ObjectMapper objectMapper;
-    
+
     public RedisLogInterceptor(LogProperties logProperties, LogCollector logCollector) {
         this.logProperties = logProperties;
         this.logCollector = logCollector;
         this.objectMapper = new ObjectMapper();
     }
-    
+
     /**
      * 记录 Redis 操作日志
      */
@@ -36,7 +32,7 @@ public class RedisLogInterceptor {
         if (!config.isRedisEnabled()) {
             return;
         }
-        
+
         RedisLogEntry logEntry = RedisLogEntry.builder()
                 .logType(LogType.REDIS.getCode())
                 .level(success ? "INFO" : "ERROR")
@@ -46,7 +42,7 @@ public class RedisLogInterceptor {
                 .status(success ? "SUCCESS" : "FAILURE")
                 .errorMessage(error)
                 .build();
-        
+
         if (value != null) {
             try {
                 logEntry.setValue(truncate(objectMapper.writeValueAsString(value), 1000));
@@ -54,10 +50,10 @@ public class RedisLogInterceptor {
                 logEntry.setValue(truncate(value.toString(), 1000));
             }
         }
-        
+
         logCollector.collect(logEntry);
     }
-    
+
     /**
      * 创建带日志记录的 RedisTemplate 包装器
      */
@@ -65,33 +61,33 @@ public class RedisLogInterceptor {
         // 返回一个代理对象，拦截所有方法调用
         return new LoggingRedisTemplate<>(redisTemplate, this);
     }
-    
+
     private String truncate(String str, int maxLength) {
         if (str == null) {
             return null;
         }
         return str.length() > maxLength ? str.substring(0, maxLength) + "..." : str;
     }
-    
+
     /**
      * 带 Redis 日志记录的 RedisTemplate 实现
      */
     public static class LoggingRedisTemplate<K, V> extends RedisTemplate<K, V> {
-        
+
         private final RedisTemplate<K, V> delegate;
         private final RedisLogInterceptor logInterceptor;
-        
+
         public LoggingRedisTemplate(RedisTemplate<K, V> delegate, RedisLogInterceptor logInterceptor) {
             this.delegate = delegate;
             this.logInterceptor = logInterceptor;
         }
-        
+
         @Override
-        public void opsForValue() {
+        public ValueOperations<K, V> opsForValue() {
             // 委托给原始模板
-            super.opsForValue();
+            return super.opsForValue();
         }
-        
+
         // 可以覆盖更多方法来添加日志记录
         // 这里只是一个示例框架
     }

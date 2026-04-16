@@ -1,6 +1,6 @@
 package com.huochai.log.handler;
 
-import com.huochai.log.model.LogEntry;
+import com.huochai.log.context.LogEntry;
 import lombok.Data;
 
 /**
@@ -8,9 +8,9 @@ import lombok.Data;
  */
 @Data
 public class LogEvent {
-    
+
     private LogEntry logEntry;
-    
+
     public void clear() {
         this.logEntry = null;
     }
