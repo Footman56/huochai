@@ -1,6 +1,6 @@
 package com.huochai.common.log;
 
-import com.huochai.auth.infrastructure.security.LoginUser;
+import com.huochai.domain.permission.bean.LoginUser;
 import com.huochai.common.log.mapper.OperationLogMapper;
 
 import org.aspectj.lang.JoinPoint;

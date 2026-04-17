@@ -104,16 +104,16 @@
     </logger>
 
     <!-- Token服务日志 -->
-    <logger name="com.huochai.auth.domain.service.impl.TokenDomainServiceImpl" level="DEBUG"/>
+    <logger name="com.huochai.domain.auth.service.impl.TokenDomainServiceImpl" level="DEBUG"/>
     
     <!-- 认证服务日志 -->
-    <logger name="com.huochai.auth.domain.service.impl.AuthDomainServiceImpl" level="DEBUG"/>
+    <logger name="com.huochai.domain.auth.service.impl.AuthDomainServiceImpl" level="DEBUG"/>
     
     <!-- Redis Token服务日志 -->
-    <logger name="com.huochai.auth.domain.service.impl.RedisTokenServiceImpl" level="DEBUG"/>
+    <logger name="com.huochai.domain.auth.service.impl.RedisTokenServiceImpl" level="DEBUG"/>
     
     <!-- JWT过滤器日志 -->
-    <logger name="com.huochai.auth.infrastructure.filter.JwtAuthenticationFilter" level="DEBUG"/>
+    <logger name="com.huochai.config.filter.JwtAuthenticationFilter" level="DEBUG"/>
 
     <!-- 权限相关日志 -->
     <logger name="com.huochai.permission" level="DEBUG"/>

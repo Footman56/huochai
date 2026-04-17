@@ -1,6 +1,6 @@
 package com.huochai.config;
 
-import com.huochai.auth.infrastructure.filter.JwtAuthenticationFilter;
+import com.huochai.config.filter.JwtAuthenticationFilter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -166,7 +166,10 @@ public class SecurityConfig {
                         // ----- OAuth2 端点放行 -----
                         .requestMatchers(
                                 "/oauth2/**",           // OAuth2 授权端点
-                                "/.well-known/**"       // OIDC 发现端点
+                                "/.well-known/**",      // OIDC 发现端点
+                                "/userinfo",            // OIDC UserInfo端点
+                                "/login",               // 登录页面
+                                "/oauth2/consent"       // 授权同意页面
                         ).permitAll()
 
                         // ----- 静态资源放行 -----
